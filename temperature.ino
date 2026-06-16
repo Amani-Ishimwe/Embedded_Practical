@@ -10,7 +10,8 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 String candidateName = "ISHIMWE AMANI SAMUEL";
 
-void scrollName();
+int scrollIndex = 0;
+unsigned long lastScroll = 0;
 
 void setup()
 {
@@ -27,17 +28,11 @@ void loop()
 {
   float temperature = dht.readTemperature();
 
+  // ================= TEMPERATURE =================
   lcd.setCursor(0, 1);
   lcd.print("Temp:            ");
 
-  if (isnan(temperature))
-  {
-    lcd.setCursor(6, 1);
-    lcd.print("ERR");
-
-    Serial.println("ERR");
-  }
-  else
+  if (!isnan(temperature))
   {
     lcd.setCursor(6, 1);
     lcd.print(temperature);
@@ -46,16 +41,40 @@ void loop()
 
     Serial.println(temperature);
   }
+  else
+  {
+    lcd.setCursor(6, 1);
+    lcd.print("ERR");
 
-  scrollName();
+    Serial.println("ERR");
+  }
 
-  delay(2000);
+  // ================= SCROLL NAME =================
+  if (millis() - lastScroll > 300)
+  {
+    scrollText();
+    lastScroll = millis();
+  }
+
+  delay(200);
 }
 
-void scrollName()
+// ================= SCROLL FUNCTION =================
+void scrollText()
 {
+  String padded = candidateName + "                ";
+
   lcd.setCursor(0, 0);
-  lcd.print("                ");
-  lcd.setCursor(0, 0);
-  lcd.print(candidateName);
+
+  for (int i = 0; i < 16; i++)
+  {
+    lcd.print(padded[(scrollIndex + i) % padded.length()]);
+  }
+
+  scrollIndex++;
+
+  if (scrollIndex >= padded.length())
+  {
+    scrollIndex = 0;
+  }
 }

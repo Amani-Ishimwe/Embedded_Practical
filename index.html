@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IoT Temperature Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MQTT JS Library -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>IoT Temperature Monitor</h1>
+
+    <div class="card">
+
+      <div class="label">Live Temperature</div>
+
+      <div class="value">
+        <span id="temp">--</span>
+        <span>°C</span>
+      </div>
+
+      <div id="status">Connecting...</div>
+
+    </div>
+
+  </div>
+
+<script>
+  // MQTT CONNECTION
+  const client = mqtt.connect("ws://broker.benax.rw:9001");
+
+  const topic = "rwanda/arduino/dht11/temperature";
+
+  client.on("connect", function () {
+    document.getElementById("status").innerText = "Connected ✔";
+    client.subscribe(topic);
+  });
+
+  client.on("message", function (topic, message) {
+    const temp = message.toString();
+
+    document.getElementById("temp").innerText = temp;
+  });
+</script>
+
+</body>
+</html>

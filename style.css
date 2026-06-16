@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: black;
+  color: #f5f5dc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.card {
+  border: 2px solid #f5f5dc;
+  padding: 40px;
+  border-radius: 15px;
+  background: #111;
+  width: 300px;
+}
+
+.value {
+  font-size: 60px;
+  margin: 20px 0;
+}
+
+#status {
+  font-size: 14px;
+  opacity: 0.7;
+}
